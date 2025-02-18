@@ -71,11 +71,15 @@ public class MemberController {
         return "updateMember";
     }
     @PostMapping("/update")
-    public String update(MemberDto dto,
+    public String update(@Valid @ModelAttribute("member") MemberDto member,
+                         BindingResult bindingResult,
                          RedirectAttributes redirectAttributes){
+        if(bindingResult.hasErrors()){
+            return "updateMember";
+        }
         //수정 요청
-        log.info("################### DTO : ###################" + dto);
-        memberService.updateMember(dto);
+        log.info("################### DTO : ###################" + member);
+        memberService.updateMember(member);
         //메시지 전송
         redirectAttributes.addFlashAttribute("msg","수정 완료");
         return "redirect:/member/view";
